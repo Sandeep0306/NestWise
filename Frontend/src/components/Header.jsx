@@ -4,7 +4,7 @@ import { FaSearch } from 'react-icons/fa';
 export default function Header() {
   return (
     <header className=" bg-slate-100  shadow-md">
-        <div className="flex justify-between items-center max-w-7xl mx-auto py-3">
+        <div className="flex justify-between items-center max-w-7xl mx-auto py-4">
         <Link to="/">
         <h1 className="bg-gradient-to-r from-amber-500 via-orange-600 to-yellow-500 bg-clip-text text-transparent 
         self-center font-serif text-2xl font-semibold whitespace-nowrap">NestWise</h1>
@@ -19,15 +19,15 @@ export default function Header() {
                 <FaSearch className='text-slate-600'/>
             </button>
         </form>
-        <ul className="flex gap-4">
+        <ul className="flex gap-5">
             <Link to="/">
-            <li className="hidden sm:inline text-slate-700 hover:underline">Home</li>
+            <li className="hidden sm:inline text-slate-700 hover:underline text-lg">Home</li>
             </Link>
             <Link to= "/about">
-            <li className="hidden sm:inline text-slate-700 hover:underline">About</li>
+            <li className="hidden sm:inline text-slate-700 hover:underline text-lg">About</li>
             </Link>
             <Link to="/signin">
-            <li className=" text-slate-700 hover:underline">Sign In</li>
+            <li className=" inline-block ml-4 px-5 py-2 text-sm font-medium text-white bg-violet-600 border border-violet-600 rounded active:text-violet-500 hover:bg-transparent hover:text-violet-600 focus:outline-none focus:ring">Sign In</li>
             </Link>
         </ul>
         </div>

@@ -1,6 +1,6 @@
 import { useState } from "react"
 import {Link, useNavigate} from "react-router-dom"
-
+import OAuth from "../components/oAuth";
 const signUp = () => {
   const [formData, setformData] = useState({});
   const [error, setError] = useState(null);
@@ -18,23 +18,25 @@ const signUp = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const res = await fetch('/api/auth/signup', {
+      const res = await fetch('/api/auth/signUp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
       });
+
       const data = await res.json();
       console.log(data);
+
       if (data.success === false) {
         setLoading(false);
         setError(data.message);
         return;
       }
       setLoading(false);
-      setError(null);
-      navigate('/sign-in');
+      // setError(null);
+      navigate('/signIn');
     } catch (error) {
       setLoading(false);
       setError(error.message);
@@ -69,11 +71,11 @@ const signUp = () => {
 
         <button
           disabled={loading}
-          className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80'
+          className='text-white rounded-lg bg-violet-600 border border-violet-600  active:text-violet-500 hover:bg-transparent hover:text-violet-600 focus:outline-none focus:ring p-3  uppercase disabled:opacity-80'
         >
-         sign In
+         {loading ? 'Loading...' : 'sign up'}
         </button>
-        {/* <OAuth/> */}
+        <OAuth/>
       </form>
       <div className='flex gap-2 mt-5'>
         <p>Have an account?</p>
