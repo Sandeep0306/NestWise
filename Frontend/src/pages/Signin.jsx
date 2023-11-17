@@ -1,13 +1,14 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-// import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import OAuth from "../components/oAuth";
+import { signInStart, signInSuccess, signInFailure } from '../redux/user/slice';
 
 const signin = () => {
   const [formData, setformData] = useState({});
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const {loading, error} = useSelector((state) => state.user);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChange = (e) =>{
     setformData({
@@ -19,7 +20,7 @@ const signin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      setLoading(true);
+      dispatch(signInStart());
       const res = await fetch('/api/auth/signIn', {
         method: 'POST',
         headers: {
@@ -32,16 +33,14 @@ const signin = () => {
       console.log(data);
 
       if (data.success === false) {
-        setLoading(false);
-        setError(data.message);
+        dispatch(signInFailure(data.errorMessage));
+        // console.log(data.message);
         return;
       }
-      setLoading(false);
-      // setError(null);
+      dispatch(signInSuccess(data));
       navigate('/');
     } catch (error) {
-      setLoading(false);
-      setError(error.message);
+      dispatch(signInFailure(error.message));
     }
   };
   return (
@@ -110,8 +109,8 @@ const signin = () => {
               or sign up
             </a>
             <span className="border-b w-1/5 md:w-1/4" />
-            {error && <p className='text-red-500 mt-5'>{error}</p>}
           </div>
+          {error && <p className='text-red-500 mt-5'>{error}</p>}
         </div>
       </div>
     </div>
