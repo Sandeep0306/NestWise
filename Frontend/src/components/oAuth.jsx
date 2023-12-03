@@ -1,11 +1,40 @@
+import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
+import { app } from '../../firebase';
+import { useDispatch } from 'react-redux';
+import { signInSuccess } from '../redux/user/slice';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function oAuth() {
-  return (
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const googleClickHandler = async () =>{
+    try{
+      const provider = new GoogleAuthProvider();
+      const auth = getAuth(app);
+      const result = await signInWithPopup(auth, provider);
 
-    <a
-            href="#"
-            className="flex items-center justify-center mt-4 text-white rounded-lg shadow-md hover:bg-gray-100"
+      const res = await fetch('/api/auth/google', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: result.user.displayName,
+          email: result.user.email,
+          photo: result.user.photoURL,
+        }),
+      });
+      const data = await res.json();
+      dispatch(signInSuccess(data));
+      navigate('/');
+    } 
+    catch(error){
+      console.log("could not sign-in with google", error);
+    }
+  }
+  return (
+    <a type="button" onClick={googleClickHandler} href="#"className="flex items-center justify-center mt-4 text-white rounded-lg shadow-md hover:bg-gray-100"
           >
             <div className="px-4 py-3">
               <svg className="h-6 w-6" viewBox="0 0 40 40">
